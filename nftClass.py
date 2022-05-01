@@ -2,7 +2,7 @@ from asyncio.windows_events import NULL
 from multiprocessing.sharedctypes import Value
 
 
-class NFT:
+class NFT():
 
     def __init__(self, value = 0, newOwner = NULL, currentOwner = NULL):
         self.value = value # current value of NFT at purchase
@@ -13,7 +13,7 @@ class NFT:
 
     def processTransaction(wallet):
         print("NFT Transaction Processing...")
-        if (wallet >= NFT.value): #i forgot to define the wallet somewhere, but basically it's just how much money you have to buy the nft
+        if (wallet >= NFT.value): # how much money you have to buy the nft, hoping this will take the object
             wallet = wallet - NFT.value
             temp = newOwner
             currentOwner = newOwner
