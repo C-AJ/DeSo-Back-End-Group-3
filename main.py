@@ -1,75 +1,49 @@
+from urllib import response
 import requests
 import os
 import json
-import requests
 from bson.json_util import dumps
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
-from pymongo import MongoClient
-from dotenv import load_dotenv
 
-
-from nftClass import NFT
-from WalletClass import Wallet
-
-load_dotenv()
 app = Flask(__name__)
 CORS(app)
-client = MongoClient(os.environ.get("MOGNODB_URI"))
-db = client["deso-v0"]
-app.config['CORS_HEADERS'] = 'content-type'
-
-nfts = db["nfts"]
-baseURL = "http://localhost:17001/api/v0"
+app.config['CORS_HEADERS'] = 'content-type' # using this base url bc this is where our node is
 
 @app.route("/")
-
 def index():
     return "DeSo backend running"
 
-@app.route("/api/get-exchange-rate")
-def getExcangeRate():
-    r = requests.get('http://localhost:17001/api/v0/get-exchange-rate') # where we running node
-    #r = requests.get('https://api.github.com', auth=('user', 'pass'))
+@app.route("/api/get-exchange-rate") # mostly for checking server connection stuff
+def getExchangeRate():
+    r = requests.get("http://localhost:17001/api/v0/get-exchange-rate")
+    return jsonify(r.json())      
 
-    #print(r) 
-    r.status_code
-    #print 
-    #r.headers[content-type]
-    
-    return jsonify(r.jason())
-
+# so these functions have the base code for the tasks listed on the "all hands" doc
+# they most likely are not finished and need extra things so we can forward info to frontend (i believe that's what we're doing)
+# cannot test until we get the proxy server going though
+@app.route("/api/submit-transaction", methods=["POST"])
 def submitTransaction():
-    if request.method == "TRANSACTION":
-        r = requests.get("http://localhost:17001/api/v0/get-transaction")
-        r.status_code
-        print(r.json)
-        return jsonify({"success": True})
+    if request.method == "POST":
+        print(request.json)
+        r = requests.post("http://localhost:17001/api/v0/transaction", data=request.json)
+        return jsonify(r.json())
 
+@app.route("/api/create-nft", methods=["POST"])
 def createNFT():
-    if request.method == "CREATE":
-          r = requests.get("http://localhost:17001/api/v0/create-nft")
-          r.status_code
-          print(r.json)
-          return jsonify({"success": True})
+    if request.method == "POST":
+        print(request.json)
+        r = requests.post("http://localhost:17001/api/v0/nft", data=request.json)
+        return jsonify(r.json())
 
+@app.route("/api/submit-post", methods=["POST"])
 def submitPost():
     if request.method == "POST":
-          r = requests.get("http://localhost:17001/api/v0/submit-post")
-          r.status_code
-          print(r.json)
-          return jsonify({"success": True})    
+        print(request.json)
+        r = requests.post("http://localhost:17001/api/v0/post", data=request.json)
+        headers = {'Accept': 'application/json'} # trying to fix JSONDecodeError
+        response = requests.get("http://localhost:17001/api/v0/post", headers=headers).json()
+        return jsonify(r.json()) 
+        #return jsonify({"success":True}) # debug line
 
-def main():
-    #getRequests()
-    wallet = Wallet() # needs amount
-    nft = NFT() # needs value, newOwner, and currentOwner
-
-    nft.processTransaction(wallet.amount) # after this call, transaction should be complete
-    # am i overthinking python?
-
-    return
-
-#app.run(debug = True)
-if __name__ == "__main__":
-    main()
+app.run(debug = True)
