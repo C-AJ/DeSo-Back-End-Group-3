@@ -26,6 +26,10 @@ def getExchangeRate():
 def submitTransaction():
     if request.method == "POST":
         print(request.json)
+        payload = json.dumps(request.json)
+        headers = {
+            "Content-Type": "application/json"
+        }
         r = requests.post("http://localhost:17001/api/v0/transaction", data=request.json)
         return jsonify(r.json())
 
@@ -33,17 +37,23 @@ def submitTransaction():
 def createNFT():
     if request.method == "POST":
         print(request.json)
+        payload = json.dumps(request.json)
+        headers = {
+            "Content-Type": "application/json"
+        }
         r = requests.post("http://localhost:17001/api/v0/nft", data=request.json)
         return jsonify(r.json())
 
 @app.route("/api/submit-post", methods=["POST"])
-def submitPost():
-    if request.method == "POST":
-        print(request.json)
-        r = requests.post("http://localhost:17001/api/v0/post", data=request.json)
-        headers = {'Accept': 'application/json'} # trying to fix JSONDecodeError
-        response = requests.get("http://localhost:17001/api/v0/post", headers=headers).json()
-        return jsonify(r.json()) 
-        #return jsonify({"success":True}) # debug line
+def submit_post():
+  if request.method == "POST":
+    print(request.json)
+    payload = json.dumps(request.json)
+    headers = {
+      "Content-Type": "application/json"
+    }
+    post = requests.post("http://localhost:17001/api/v0/submit-post", headers=headers ,data=payload)
+    print(post.json())
+    return jsonify(post.json())
 
 app.run(debug = True)
