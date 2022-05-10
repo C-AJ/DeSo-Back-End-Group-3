@@ -8,7 +8,21 @@ from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
 CORS(app)
-app.config['CORS_HEADERS'] = 'content-type' # using this base url bc this is where our node is
+app.config['CORS_HEADERS'] = 'content-type'
+
+# DeSo Node
+NODE_DESO = "https://node.deso.org"
+
+# Deso Local Node
+NODE_LOCAL = "http://localhost:" + str(os.environ.get("DESO_PORT"))
+baseURL = NODE_DESO + "/api"
+
+PRODUCTION = os.environ.get("PRODUCTION")
+PORT = 8080 if PRODUCTION else 17000
+
+headers = {
+  "Content-Type": "application/json"
+}
 
 @app.route("/")
 def index():
@@ -54,6 +68,6 @@ def submit_post():
     }
     post = requests.post("http://localhost:17001/api/v0/submit-post", headers=headers ,data=payload)
     print(post.json())
-    return jsonify(post.json())
+    return jsonify(post.json())    
 
 app.run(debug = True)
