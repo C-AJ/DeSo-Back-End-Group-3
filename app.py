@@ -5,7 +5,9 @@ import json
 from bson.json_util import dumps
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
+from dotenv import load_dotenv
 
+load_dotenv()
 app = Flask(__name__)
 CORS(app)
 app.config['CORS_HEADERS'] = 'content-type'
@@ -26,7 +28,7 @@ headers = {
 
 @app.route("/")
 def index():
-    return "DeSo backend running"
+    return "DeSo backend running v1"
 
 @app.route("/api/get-exchange-rate") # mostly for checking server connection stuff
 def getExchangeRate():
@@ -70,4 +72,5 @@ def submit_post():
     print(post.json())
     return jsonify(post.json())    
 
-app.run(debug = True)
+if __name__ == "__main__":
+  app.run(debug = not PRODUCTION, threaded=True)
