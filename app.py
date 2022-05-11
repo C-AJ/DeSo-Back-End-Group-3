@@ -7,7 +7,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 from dotenv import load_dotenv
 import js2py
-import sign.js
+from temp import *
 
 load_dotenv()
 app = Flask(__name__)
@@ -33,7 +33,8 @@ def index():
     return "DeSo backend running v2"
 
 def sign():
-    sign.signTransaction(seedHex, transactionHex)
+    js2py.translate_file("sign.js", "temp.py")
+    temp.signTransaction()
 
 @app.route("/api/get-exchange-rate") # mostly for checking server connection stuff
 def getExchangeRate():
@@ -52,6 +53,9 @@ def submitTransaction():
             "Content-Type": "application/json"
         }
         r = requests.post(NODE_DESO + "/v0/transaction", data=payload)
+        f = open("payload.json", "w")
+        f.write(payload)
+        f.close()
         return jsonify(r.json())
 
 @app.route("/api/create-nft", methods=["POST"])
