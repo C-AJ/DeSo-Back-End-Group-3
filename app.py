@@ -28,7 +28,7 @@ headers = {
 
 @app.route("/")
 def index():
-    return "DeSo backend running v1"
+    return "DeSo backend running v2"
 
 @app.route("/api/get-exchange-rate") # mostly for checking server connection stuff
 def getExchangeRate():
@@ -46,7 +46,7 @@ def submitTransaction():
         headers = {
             "Content-Type": "application/json"
         }
-        r = requests.post(NODE_DESO + "/v0/transaction", data=request.json)
+        r = requests.post(NODE_DESO + "/v0/transaction", data=payload)
         return jsonify(r.json())
 
 @app.route("/api/create-nft", methods=["POST"])
@@ -57,7 +57,7 @@ def createNFT():
         headers = {
             "Content-Type": "application/json"
         }
-        r = requests.post(NODE_DESO + "/v0/nft", data=request.json)
+        r = requests.post(NODE_DESO + "/v0/nft", data=payload)
         return jsonify(r.json())
 
 @app.route("/api/submit-post", methods=["POST"])
