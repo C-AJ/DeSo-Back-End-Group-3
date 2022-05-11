@@ -7,7 +7,6 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 from dotenv import load_dotenv
 import js2py
-from temp import *
 
 load_dotenv()
 app = Flask(__name__)
@@ -33,7 +32,7 @@ def index():
     return "DeSo backend running v2"
 
 def sign():
-    js2py.translate_file("sign.js", "temp.py")
+    temp = js2py.translate_file("sign.js", "temp.py")
     temp.signTransaction()
 
 @app.route("/api/get-exchange-rate") # mostly for checking server connection stuff
