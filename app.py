@@ -31,7 +31,7 @@ headers = {
 def index():
     return "DeSo backend running v2"
 
-def sign():
+def sign(): # bap
     temp = js2py.translate_file("sign.js", "temp.py")
     temp.signTransaction()
 
