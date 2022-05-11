@@ -6,6 +6,8 @@ from bson.json_util import dumps
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 from dotenv import load_dotenv
+import js2py
+import sign.js
 
 load_dotenv()
 app = Flask(__name__)
@@ -29,6 +31,9 @@ headers = {
 @app.route("/")
 def index():
     return "DeSo backend running v2"
+
+def sign():
+    sign.signTransaction(seedHex, transactionHex)
 
 @app.route("/api/get-exchange-rate") # mostly for checking server connection stuff
 def getExchangeRate():
