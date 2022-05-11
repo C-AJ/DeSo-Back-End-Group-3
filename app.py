@@ -11,7 +11,7 @@ CORS(app)
 app.config['CORS_HEADERS'] = 'content-type'
 
 # DeSo Node
-NODE_DESO = "https://node.deso.org"
+NODE_DESO = "https://node.deso.org/api"
 
 # Deso Local Node
 NODE_LOCAL = "http://localhost:" + str(os.environ.get("DESO_PORT"))
@@ -30,7 +30,7 @@ def index():
 
 @app.route("/api/get-exchange-rate") # mostly for checking server connection stuff
 def getExchangeRate():
-    r = requests.get("http://localhost:17001/api/v0/get-exchange-rate")
+    r = requests.get(NODE_DESO + "/v0/get-exchange-rate")
     return jsonify(r.json())      
 
 # so these functions have the base code for the tasks listed on the "all hands" doc
@@ -44,7 +44,7 @@ def submitTransaction():
         headers = {
             "Content-Type": "application/json"
         }
-        r = requests.post("http://localhost:17001/api/v0/transaction", data=request.json)
+        r = requests.post(NODE_DESO + "/v0/transaction", data=request.json)
         return jsonify(r.json())
 
 @app.route("/api/create-nft", methods=["POST"])
@@ -55,7 +55,7 @@ def createNFT():
         headers = {
             "Content-Type": "application/json"
         }
-        r = requests.post("http://localhost:17001/api/v0/nft", data=request.json)
+        r = requests.post(NODE_DESO + "/v0/nft", data=request.json)
         return jsonify(r.json())
 
 @app.route("/api/submit-post", methods=["POST"])
@@ -66,7 +66,7 @@ def submit_post():
     headers = {
       "Content-Type": "application/json"
     }
-    post = requests.post("http://localhost:17001/api/v0/submit-post", headers=headers ,data=payload)
+    post = requests.post(NODE_DESO + "/v0/submit-post", headers=headers ,data=payload)
     print(post.json())
     return jsonify(post.json())    
 
