@@ -31,9 +31,9 @@ headers = {
 def index():
     return "DeSo backend running v2"
 
-#def sign(): # bap
-    #temp = js2py.translate_file("sign.js", "temp.py")
-   # temp.signTransaction()
+'''def sign(): # bap
+    temp = js2py.translate_file("sign.js", "temp.py")
+    temp.signTransaction()'''
 
 @app.route("/api/get-exchange-rate") # mostly for checking server connection stuff
 def getExchangeRate():
@@ -52,9 +52,9 @@ def submitTransaction():
             "Content-Type": "application/json"
         }
         r = requests.post(NODE_DESO + "/v0/transaction", data=payload)
-        #f = open("payload.json", "w")
-        #f.write(payload)
-        #f.close()
+        f = open("payload.json", "w")
+        f.write(payload)
+        f.close()
         return jsonify(r.json())
 
 @app.route("/api/create-nft", methods=["POST"])
