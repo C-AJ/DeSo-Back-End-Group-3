@@ -51,10 +51,10 @@ def submitTransaction():
         headers = {
             "Content-Type": "application/json"
         }
-        r = requests.post(NODE_DESO + "/v0/transaction", data=payload)
-        f = open("payload.json", "w")
+        r = requests.post(NODE_DESO + "/v0/submit-transaction", headers = headers, data=payload)
+        '''f = open("payload.json", "w")
         f.write(payload)
-        f.close()
+        f.close()'''
         return jsonify(r.json())
 
 @app.route("/api/create-nft", methods=["POST"])
@@ -81,4 +81,4 @@ def submit_post():
     return jsonify(post.json())    
 
 if __name__ == "__main__":
-  app.run(debug = not PRODUCTION, threaded=True)
+  app.run(debug = PRODUCTION, threaded = True)
